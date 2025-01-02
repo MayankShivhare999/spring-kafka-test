@@ -1,23 +1,32 @@
 package com.example.spring_kafka_v1.producer;
 
 import com.example.spring_kafka_v1.dao.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class KafkaProducer {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Message> objectKafkaTemplate;
 
-    public KafkaProducer(KafkaTemplate<String, Object> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    private final KafkaTemplate<String, String> stringKafkaTemplate;
+
+
+    @Autowired
+    public KafkaProducer(
+            @Qualifier("stringKafkaTemplate") KafkaTemplate<String, String> stringKafkaTemplate,
+            @Qualifier("objectKafkaTemplate") KafkaTemplate<String, Message> objectKafkaTemplate) {
+        this.stringKafkaTemplate = stringKafkaTemplate;
+        this.objectKafkaTemplate = objectKafkaTemplate;
     }
 
-//    public void sendMessage(String topic, String message) {
-//        kafkaTemplate.send(topic, message);
-//    }
+    public void sendObjectMessage(String topic, Message message) {
+        objectKafkaTemplate.send(topic, message);
+    }
 
-    public void sendMessage(String topic, Message message) {
-        kafkaTemplate.send(topic, message);
+    public void sendStringMessage(String topic, String message) {
+        stringKafkaTemplate.send(topic, message);
     }
 }

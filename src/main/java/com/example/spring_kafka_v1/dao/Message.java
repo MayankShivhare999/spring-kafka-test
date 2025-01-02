@@ -1,11 +1,13 @@
 package com.example.spring_kafka_v1.dao;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 public class Message {
-    private int id;
+    private UUID id;
     private String content;
 }
